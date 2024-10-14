@@ -3,38 +3,53 @@
 
 #include<string>
 
+using namespace std;
+
 class station{
     //atributos de la estación
 private:
-    std::string stationName;
+    string stationName;
     int stationCode;
-    std::string stationManager;
-    std::string  stationRegion;
+    string stationManager;
+    string  stationRegion;
     float coordinatesGps[2];
     float stationTank[3];
-    int *stationSuppliers=nullptr;
-
+    int *stationSuppliers;
+    int cantidadsurtidores;
 
 public:
     //métodos de la estación
-    station(std::string,int,std::string,std::string,float,float,float,float,float,int);//constructor
+    station() {
+        stationName = "";
+        stationCode = 0;
+        stationManager = "";
+        stationRegion = "";
+        coordinatesGps[0] = 0.0;
+        coordinatesGps[1] = 0.0;
+        stationTank[0] = 0.0;
+        stationTank[1] = 0.0;
+        stationTank[2] = 0.0;
+        stationSuppliers = nullptr;
+        cantidadsurtidores = 0;
+    }
+    station(string, int, string, string, float, float, float, float, float, int*, int);//constructor
     ~station();//destructor
     //getters
-    std::string getStationName();
+    string getStationName();
     int getStationCode();
-    std::string getStationManager();
-    std::string getStationRegion();
-    float*  getCoordinatesGps();
-    float*  getStationTank();
-    int*    getSuppliers();
+    string getStationManager();
+    string getStationRegion();
+    float* getCoordinatesGps();
+    float* getStationTank();
+    int* getSuppliers();
+    int getSurtidores();
     //setters
-    void setStationName(std::string stationname);
+    void setStationName(string stationname);
     void setStationCode(int code);
-    void setStationManager(std::string managerName);
-    void setStationRegion(std::string regionName);
+    void setStationManager(string managerName);
+    void setStationRegion(string regionName);
     void setCoordinatesGps(float lat,float lon);
     void setStationTank(float reg ,float ec,float ex);
-    void setSuppliers(int maxsuppliers);
-
+    void setSuppliers(int *suppliers, int cant);
 };
 #endif // STATION_H

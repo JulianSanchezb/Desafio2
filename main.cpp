@@ -1,6 +1,8 @@
 #include<iostream>
-#include<limits>
 #include<fstream>
+#include <cstdlib>
+#include <ctime>
+#include <random>
 
 #include"station.h"
 #include"pump.h"
@@ -37,7 +39,9 @@ void menu(){
 }
 
 int gestionRed(){
-    int opc = 0;
+    int opc = 0,c = 0;
+    station *estaciones = new station [20];
+
     do{
         cout<<"Ingrese una opcion\n1. Agregar estacion\n2. Eliminar estacion\3. Calcular ventas en cada estacion(por combustible)\n4. Precios combustible\n0. Volver\n";
         cin>>opc;
@@ -66,40 +70,6 @@ int gestionRed(){
 
 int main(){
 
-    //int code_;
-    //int model_;
-    //bool state_;
-    //string date_;
-    //float amount_;
-    //int type_;
-    //int method_;
-    //int dni_;
-    //float total_;
-
-    //cout<<"Ingrese codigo\n";
-    //cin>>code_;
-    //cout<<"Ingrese Modelo\n";
-    //cin>>model_;
-    //cout<<"Ingrese estado\n";
-    //cin>>state_;
-    //cout<<"Ingrese fecha";
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    //getline(cin,date_);
-    //cout<<"\nIngrese cantidad\n";
-    //cin>>amount_;
-    //cout<<"Ingrese tipo gas\n";
-    //cin>>type_;
-    //cout<<"Ingrese motodo de pago\n";
-    //cin>>method_;
-    //cout<<"Ingrese documento\n";
-    //cin>>dni_;
-    //cout<<"Ingrese total\n";
-    //cin>>total_;
-
-    //station(name,codeOne,manager,region,latitude,length,regular,eco,extra,sizeSuppliers)
-    pump surtidor = pump(code_, model_, state_, date_, amount_, type_, method_, dni_, total_);
-
-    cout<<"Codigo: "<<surtidor.getCode();
     return 0;
 }
 
@@ -129,32 +99,139 @@ void updateFile(pump surtidor1){
     rename("modFile.txt","ventas.txt");
     cout<<"parce se modifico el archivo cucho"<<endl;
 }
-/*
-void stationin(station estacion){
+
+void stationin(station *estaciones,int &c){
+    random_device rd;
+    mt19937 gen(rd());
+
     ifstream filei;
-    ofstream fileo;
-    string aux,line;
-    bool value = false;
-    filei.open("Stations.txt");
+    string line,aux;
+    int l = 1,r = 0, code;
+
+    string name = "";
+    string manager = "";
+    string region = "";
+    float coordinates[2];
+    float tank[3];
+
+    filei.open("estaciones.txt");
     if(!filei.is_open()){
         cout<<"Error al abrir Stations.txt\n";
-        break;
     }
 
-    while(getline(filei,aux)){
-        line =aux;
+    //Asignacion del codigo de la estacion
+    while(getline(filei,line)){
+        if(l == 2){
+            aux = line.substr(0,(line.find('-')+1));
+            code = stoi(aux) + 1;
+        }
+        if(line.empty()){
+            l = 0;
+        }
+        l++;
     }
-    aux = "";
-    for(char c: line){
-        if(c == ' '){
-            aux = c;
+    //Asignacion de nombre de la estacion
+    while(name == ""){
+        cout<<"\nIngrese el nombre de la estacion \n";
+        getline(cin,name);
+        if(name == ""){
+            cout<<"\nNombre invalido\n";
         }
     }
-    int codigo =stoi(line[])
-                 file<<estacion.getStationName()<<" "<<estacion.getStationCode()<<"-"<<estacion.getStationManager()<<","<<estacion.getStationRegion()<<"<"<<estacion.getCoordinatesGps()<<"."
+    //Asignacion de gerente
+    while(manager == ""){
+        cout<<"\nIngrese el nombre del gerente\n";
+        getline(cin,manager);
+        if(manager == ""){
+            cout<<"\nNombre invalido\n";
+        }
+    }
+    //Asignacion de region
+    while(r < 1 || r > 3){
+        cout<<"\nIngrese la region\n1. Norte\n2. Centro\n3. sur\n";
+        cin>>r;
+        if(r < 1 || r > 3){
+            cout<<"\nRegion invalida\n";
+        }else if(r == 1){
+            region = "norte";
+        }else if(r == 2){
+            region = "centro";
+        }else if(r == 3){
+            region = "sur";
+        }
+    }
+    //Asignacion de coordenadas
+    for(int i = 0;i<=1;i++){
+        uniform_real_distribution<float> distribucion(0.0, 90.0);
+        if(i == 0){
+            coordinates[i] = round(distribucion(gen) * 100)/100;
+        }else{
+            coordinates[i] = (round(distribucion(gen) * 100)/100) * (-1);
+        }
+    }
+    //Asignacion de capacidad del tanque
+    for(int i = 0;i<=3;i++){
+        uniform_real_distribution<float> distribucion(100.0, 200.0);
+        tank[i] = {round(distribucion(gen) * 100)/100};
+    }
+    //Asignacion de surtidores
+    int cant = 0;
+    while(cant < 2 || cant > 12){
+        cout<<"Ingrese la cantidad de surtidores en la estacion\n";
+        cin>>cant;
+        if(cant < 2 || cant > 12){
+            cout<<"Fuera de rango, debe ser minimo 2 y maximo 12 surtidores\n";
+        }
+    }
 
-}*/
+    int *surtidores;
+    surtidores = new int [cant];
+    for(int i = 0;i < cant;i++){
+        cout<<"Ingrese el modelo del surtidor numero "<<i<<"\n1. Super fast\n2. Super cool\n3. Super normal";
+        cin>>surtidores[i];
+        if(surtidores[i] < 1 || surtidores[i] > 3){
+            cout<<"\n*Opcion invalida*\n";
+            i--;
+        }
+    }
 
+    station estacion(name,code,manager,region,coordinates[0],coordinates[1],tank[0],tank[1],tank[2],surtidores,cant);
+    estaciones[c] = estacion;
+    c++;
+}
+
+void updateStation(station* arr,int& c){
+    ofstream file;
+    file.open("estaciones.txt",ios::app);
+    if(!file.is_open()){
+        cout<<"Error al abrir el archivo estaciones.txt"<<endl;
+
+    }
+
+    for(int i = 0;i < c;i++){
+        file<<"\n"<<arr[i].getStationRegion()<<"$"<<arr[i].getCoordinatesGps()[0]<<"$"<<arr[i].getCoordinatesGps()[1];
+        file<<"\n"<<arr[i].getStationCode()<<"-"<<arr[i].getStationName()<<"-"<<arr[i].getStationManager()<<"\n";
+        for(int j = 0;j < 3;j++){
+            if(j != 2){
+                file<<arr[i].getStationTank()[j]<<",";
+            }else{
+                file<<arr[i].getStationTank()[j];
+            }
+        }
+        file<<endl;
+        int tam = arr[i].getSurtidores();
+
+        for(int j = 0;j < tam;j++){
+            if(j < tam-1){
+                file<<arr[i].getStationCode()<<j+1<<"/";
+            }else{
+                file<<arr[i].getStationCode()<<j+1<<"\n";
+            }
+        }
+        file2<<arr[i].getStationCode()<<"."<<j+1<<"-"<<"true"<<endl;
+    }
+    c = 0;
+}
 void manageStation(pump surtidorOne, int choice) { // Eliminar, agregar, activar, desactivar
     int choiceTwo;
 

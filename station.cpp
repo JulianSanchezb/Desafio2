@@ -3,7 +3,7 @@
 
 using namespace std;
 
-station::station(string name,int codeOne,string manager,string region,float latitude,float length,float regular,float eco, float extra, int sizeSuppliers){
+station::station(string name,int codeOne,string manager,string region,float latitude,float length,float regular,float eco, float extra, int *Suppliers, int cant){
     stationName=name;
     stationCode=codeOne;
     stationManager=manager;
@@ -13,13 +13,17 @@ station::station(string name,int codeOne,string manager,string region,float lati
     stationTank[0]=regular;
     stationTank[1]=eco;
     stationTank[2]=extra;
-    stationSuppliers= new int[sizeSuppliers];
+    stationSuppliers = new int [cant];
+    for(int i = 0;i < cant;i++){
+        stationSuppliers[i] = Suppliers[i];
+    }
+    cantidadsurtidores = cant;
 }
 //destructor
 station::~station(){
     delete[] stationSuppliers;
-
 }
+
 //getters
 string station::getStationName(){
     return stationName;
@@ -41,6 +45,9 @@ float* station::getStationTank(){
 }
 int* station::getSuppliers(){
     return stationSuppliers;
+}
+int station::getSurtidores(){
+    return cantidadsurtidores;
 }
 //setters
 void station::setStationName(string stationname){
@@ -66,9 +73,13 @@ void station::setStationTank(float reg ,float ec,float ex){
     stationTank[2]=ex;
 }
 
-void station::setSuppliers(int maxsuppliers){
-    if(stationSuppliers!=nullptr){
-        delete[] stationSuppliers;
+void station::setSuppliers(int *Suppliers,int cant){
+    if (stationSuppliers != nullptr) {
+        delete[] stationSuppliers;  // Libera memoria anterior
     }
-    stationSuppliers= new int[maxsuppliers];
+    stationSuppliers = new int [cant];
+    for(int i = 0;i < cant;i++){
+        stationSuppliers[i] = Suppliers[i];
+    }
+    cantidadsurtidores = cant;
 }
