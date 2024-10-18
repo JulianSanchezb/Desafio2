@@ -3,7 +3,7 @@
 
 using namespace std;
 
-station::station(string name,int codeOne,string manager,string region,float latitude,float length,float regular,float eco, float extra, int *Suppliers, int cant){
+station::station(string name, int codeOne, string manager, string region, float latitude, float length, float regular, float eco, float extra, int *Suppliers, int cant, int precioR, int precioE, int precioEx){
     stationName=name;
     stationCode=codeOne;
     stationManager=manager;
@@ -18,6 +18,9 @@ station::station(string name,int codeOne,string manager,string region,float lati
         stationSuppliers[i] = Suppliers[i];
     }
     cantidadsurtidores = cant;
+    precioGas[0] = precioR;
+    precioGas[1] = precioE;
+    precioGas[2] = precioEx;
 }
 //destructor
 station::~station(){
@@ -48,6 +51,9 @@ int* station::getSuppliers(){
 }
 int station::getSurtidores(){
     return cantidadsurtidores;
+}
+int* station::getPrice(){
+    return precioGas;
 }
 //setters
 void station::setStationName(string stationname){
@@ -82,4 +88,9 @@ void station::setSuppliers(int *Suppliers,int cant){
         stationSuppliers[i] = Suppliers[i];
     }
     cantidadsurtidores = cant;
+}
+void station::setPrecioGas(int precioR, int precioE, int precioEx){
+    precioGas[0] = precioE;
+    precioGas[1] = precioR;
+    precioGas[2] = precioEx;
 }
