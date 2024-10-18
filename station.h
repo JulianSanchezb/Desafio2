@@ -16,6 +16,7 @@ private:
     float stationTank[3];
     int *stationSuppliers;
     int cantidadsurtidores;
+    int precioGas[3];
 
 public:
     //métodos de la estación
@@ -31,8 +32,11 @@ public:
         stationTank[2] = 0.0;
         stationSuppliers = nullptr;
         cantidadsurtidores = 0;
+        precioGas[0]= 0;
+        precioGas[1]= 0;
+        precioGas[2]= 0;
     }
-    station(string, int, string, string, float, float, float, float, float, int*, int);//constructor
+    station(string, int, string, string, float, float, float, float, float, int*, int,int,int,int);//constructor
     ~station();//destructor
     //getters
     string getStationName();
@@ -43,6 +47,7 @@ public:
     float* getStationTank();
     int* getSuppliers();
     int getSurtidores();
+    int *getPrice();
     //setters
     void setStationName(string stationname);
     void setStationCode(int code);
@@ -51,5 +56,6 @@ public:
     void setCoordinatesGps(float lat,float lon);
     void setStationTank(float reg ,float ec,float ex);
     void setSuppliers(int *suppliers, int cant);
+    void setPrecioGas(int precioR, int precioE, int precioEx);
 };
 #endif // STATION_H

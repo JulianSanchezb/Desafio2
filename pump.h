@@ -1,41 +1,47 @@
 #ifndef PUMP_H
 #define PUMP_H
 
-#include<string>
+#include <string>
 
-class pump{
+using namespace std;
+
+class pump {
 private:
-    int code;
-    int model;
+    float code;
     bool state;
-    std::string date;
+    string date;
     float amountGas;
     int typeGas;
-    int methodPay;
+    int paymentMethod;
     int dni;
     float total;
+
 public:
-    pump(int,int,bool,std::string,float,int,int,int,float);//Constructor
-    ~pump();//Destructor
-    //Getters
-    int getCode();
-    int getModel();
-    bool getState();
-    std::string getDate();
-    float getAmountGas();
-    int getTypeGas();
-    int getMethodPay();
-    int getDni();
-    float getTotal();
-    //Setters
-    void setCode(int _code);
-    void setModel(int _model);
-    void setState(bool _state);
-    void setDate(std::string _date);
-    void setAmountgas(float _amount);
-    void setTypegas(int _type);
-    void setMethodPay(int _method);
-    void setDni(int _dni);
-    void setTotal(float _total);
+    // Constructor por defecto
+    pump();
+
+    // Constructor con parámetros
+    pump(float code_, bool state_, string date_, float amount_, int type_, int method_, int dni_, float total_);
+
+    // Getters
+    float getCode() const;
+    bool getState() const;
+    string getDate() const;
+    float getAmountGas() const;
+    int getTypeGas() const;
+    int getPaymentMethod() const;
+    int getDni() const;
+    float getTotal() const;
+
+    // Setters
+    void setCode(float code_);
+    void setState(bool state_);
+    void setDate(const string& date_);
+    void setAmountGas(float amountGas_);
+    void setTypeGas(int typeGas_);
+    void setPaymentMethod(int paymentMethod_);
+    void setDni(int dni_);
+    void setTotal(float total_);
 };
+
 #endif // PUMP_H
